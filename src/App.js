@@ -54,6 +54,22 @@ class App extends React.Component {
     }
   }
 
+  updateCat = async (updatedCat) => {
+    try {
+      let url = `${SERVER}/cats/${updatedCat._id}`;
+      let updatedCatfromDB = await axios.put(url, updatedCat);
+      let updatedCatArr = this.state.cats.map(existingCat => {
+        return existingCat._id === updatedCat._id
+          ? updatedCatfromDB.data
+          : existingCat;
+      });
+      this.setState({cats: updatedCatArr})
+
+    } catch (err) {
+      console.log('We have an error: ', err.response.data);
+    }
+  }
+
   handleCatSubmit = (e) => {
     e.preventDefault();
     let cat = {
@@ -84,6 +100,7 @@ class App extends React.Component {
             <Cats 
               cats={this.state.cats}
               deleteCat={this.deleteCat}
+              updateCat={this.updateCat}
             />
           }
           <Container className="mt-5">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Button, ListGroup } from 'react-bootstrap';
+import UpdateCatForm from './UpdateCatForm';
 
 class Cats extends React.Component {
   render() {
@@ -8,6 +9,7 @@ class Cats extends React.Component {
         key={cat._id} 
         cat={cat}
         deleteCat={this.props.deleteCat}
+        updateCat={this.props.updateCat}
       />
     ));
 
@@ -22,6 +24,12 @@ class Cats extends React.Component {
 }
 
 class Cat extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showUpdateForm: false
+    }
+  }
 
   // // could have a helper method that calls this:
   // handleDelete = () => {
@@ -31,17 +39,34 @@ class Cat extends React.Component {
   render () {
     
     return (
+      <>
       <ListGroup.Item>
         {this.props.cat.name} is {this.props.cat.color}
-        <Button 
-          variant='dark' 
-          onClick={() => {
-            this.props.deleteCat(this.props.cat._id);
-          }}
-        >
-          delete Cat
-        </Button>
+        <div>
+          <Button 
+            variant='dark' 
+            onClick={() => {
+              this.props.deleteCat(this.props.cat._id);
+            }}
+          >
+            Delete Cat
+          </Button>
+          <Button
+            onClick={() => this.setState({ showUpdateForm: true})}
+          >
+            Updated Cat
+          </Button>
+        </div>
       </ListGroup.Item>
+      {
+        this.state.showUpdateForm 
+        &&
+        <UpdateCatForm 
+          cat={this.props.cat}
+          updateCat={this.props.updateCat}  
+        />
+      }
+      </>
     )
   }
 }
